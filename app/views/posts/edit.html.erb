@@ -1,0 +1,18 @@
+<div class="d-flex justify-content-center mt-5 p-5">
+  <div class="row row-cols-1 row-cols-md-1 mb-3">
+    <div class="col">
+      <div class="card mb-4 rounded-3 shadow-sm">
+        <div class="card-header py-3 text-center">
+          <h4 class="my-0 fw-normal">Editing Post</h4>
+        </div>
+        <div class="card-body">
+          <%= render 'form', post: @post %>
+        </div>
+        <div class="card-footer py-3 text-center">
+          <%= link_to 'Show', topic_post_path(@topic, @post) %> |
+          <%= link_to 'Back', topic_post_path %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+<div class="p-5">
+  <div class="row mb-3 text-center">
+    <div class="col">
+      <div class="card mb-4 rounded-3 shadow-sm">
+        <div class="card-header py-3">
+          <h4 class="my-0 fw-normal">Edit Comment</h4>
+        </div>
+        <div class="card-body">
+          <%= render 'form', comment: @comment %>
+        </div>
+        <div class="card-footer py-3">
+          <%= link_to 'Back', topic_post_path(@topic, @post) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+

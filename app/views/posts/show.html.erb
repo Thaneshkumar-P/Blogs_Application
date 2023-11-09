@@ -1,0 +1,144 @@
+<div class="container">
+  <% if flash[:notice].present? %>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <%= notice %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% end %>
+  <h2 class="display-5 link-body-emphasis mb-1" style="font-family: 'Playfair Display', 'Georgia', 'Times New Roman', 'serif'"><%= @post.title %></h2>
+  <div class="d-flex">
+    <p class="blog-post-meta"><%= @post.created_at.to_formatted_s(:long) %> by <%= @post.user.email %></p>
+    <% if can? :edit, @post %>
+      <%= link_to 'Edit', edit_topic_post_path(params[:topic_id], @post), class: 'ms-3 text-dark mt-0 small' %>
+    <% end %>
+  </div>
+  <div>
+    <% @tag.each do |tag| %>
+      <span class="badge bg-secondary"><%= tag.name %></span>
+    <% end %>
+  </div>
+  <hr>
+
+  <div>
+    <ul>
+      <% if @post.post_image.representable? %>
+        <%= image_tag @post.post_image.representation(resize_to_limit: [500, 500]), loading: 'lazy' %>
+      <% end %>
+    </ul>
+  </div>
+  <p>
+    &nbsp;&nbsp;&nbsp;&nbsp;<%= @post.description %>
+  </p>
+    <div class="card text-center mb-3" style="width: 23rem; margin-left: auto">
+      <div class="card-header">
+        Ratings
+      </div>
+      <div class="card-body">
+        <div style="font-family: Roboto">
+          <% @star_ratings.each do |stars, count| %>
+            <%= "#{stars} star: #{count} ratings" %><br/>
+          <% end %>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div>
+          <%= form_with(model: [@topic, @post, @star]) do |star| %>
+            <div>
+              <p>
+                <%= star.radio_button :star, 1 %> 1 Star
+                <%= star.radio_button :star, 2 %> 2 Star
+                <%= star.radio_button :star, 3 %> 3 Star
+                <%= star.radio_button :star, 4 %> 4 Star
+                <%= star.radio_button :star, 5 %> 5 Star
+              </p>
+            </div>
+            <div>
+              <%= star.submit %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+
+  <div class="row d-flex justify-content-center">
+    <div class="col-md-0 col-lg-0">
+      <div class="card text-dark">
+        <div class="card-body p-4">
+          <div style="display: flex; justify-content: space-between; margin-right: auto" class="mb-3">
+            <h4 style="" >Comments</h4>
+            <%= button_to 'Add Comment', new_topic_post_comment_path(@topic, @post), method: :get, class: 'btn btn-primary btn-sm mt-1' %>
+          </div>
+
+
+          <% @comment.each do |comment| %>
+            <div class="d-flex flex-start">
+            <div>
+              <h6 class="fw-bold mb-1"><%= comment.user.email %></h6>
+              <div class="d-flex align-items-center mb-3">
+                <p class="mb-0">
+                  <%= comment.created_at.to_formatted_s(:long) %>
+                  [<% @all_comment_ratings[comment.id].each do |stars, count| %>
+                    <%= "#{stars}: #{count}" %>,
+                  <% end %>]
+                <%= link_to 'All', topic_post_comment_user_comment_ratings_path(@topic, @post, comment)	 %>&nbsp;
+                <% if can? :edit, comment %>
+                  <%= link_to 'Edit ', edit_topic_post_comment_path(@topic, @post, comment) %>&nbsp;
+                <% end %>
+                <% if can? :destroy, comment %>
+                  <%= link_to 'Delete', topic_post_comment_path(@topic, @post, comment), method: :delete, data: { confirm: 'Are you sure?' } %>
+                <% end %>
+                </p>
+              </div>
+              <p class="mb-3">
+                <%= comment.comment %>
+              </p>
+              <div>
+                <%= form_with(model: [@topic, @post, comment, @user_comment_ratings[comment.id]]) do |star| %>
+                  <p>
+                    <b>Rating</b>
+                    <%= star.radio_button :rating, 1 %> 1
+                    <%= star.radio_button :rating, 2 %> 2
+                    <%= star.radio_button :rating, 3 %> 3
+                    <%= star.radio_button :rating, 4 %> 4
+                    <%= star.radio_button :rating, 5 %> 5
+                    <%= star.submit %>
+                  </p>
+                <% end %>
+              </div>
+            </div>
+          </div>
+            <hr>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <%= button_to 'Back', topic_posts_path, method: :get, class: 'btn  btn-outline-dark mt-3 mb-3' %>
+</div>
+
+
+<script>
+  if (document.readyState !== 'loading') {
+    async function myInitCode() {
+      const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+      const postID = <%= @post.id %>
+      const topicId = <%= @topic.id %>
+      await fetch(`/topics/${topicId}/posts/${postID}/read`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': csrfToken,
+        },
+        body: JSON.stringify({ status: 'read' })
+      }).then(response => {
+        response.json()
+      }).catch(error => {
+        console.error('Error updating status:', error);
+      });
+    }
+    myInitCode();
+  }
+</script>

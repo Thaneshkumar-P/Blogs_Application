@@ -1,0 +1,36 @@
+<% if flash[:notice].present? %>
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <%= notice %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+<% end %>
+
+<div class="m-4">
+  <h1 style="font-family: Roboto">Topics</h1>
+  <%= button_to 'New Topic', new_topic_path, method: :get, class: 'btn btn-primary mt-2' %>
+</div>
+
+<div class="card m-4">
+  <table class="table table-striped" style="font-family: Roboto, 'Roboto Light'">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th colspan="4">Options</th>
+    </tr>
+  </thead>
+
+  <tbody class="table-group-divider">
+    <% @topics.each do |topic| %>
+      <tr>
+        <td><%= topic.name %></td>
+        <td><%= link_to 'Posts', topic_posts_path(topic.id), class: 'text-decoration-none link-primary' %></td>
+        <td><%= link_to 'Show', topic_path(topic), class: 'text-decoration-none link-primary' %></td>
+        <td><%= link_to 'Edit', edit_topic_path(topic), class: 'text-decoration-none link-primary' %></td>
+        <td><%= link_to 'Destroy', topic_path(topic), method: :delete, data: { confirm: 'Are you sure?' }, class: 'text-decoration-none link-primary' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
+
+<br>

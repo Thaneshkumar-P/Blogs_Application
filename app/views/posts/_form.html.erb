@@ -1,0 +1,48 @@
+<%= form_with(model: [@topic, post], local: false, class: 'form-group row', id: 'new_post_form' ) do |form| %>
+  <% if post.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h2>
+
+      <ul>
+        <% post.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field col">
+    <%= form.label :title, class: 'form-label' %>
+    <%= form.text_field :title, class: 'form-control' %>
+  </div>
+
+  <div class="field col">
+    <%= form.label :description, class: 'form-label' %>
+    <%= form.text_area :description, class: 'form-control' %>
+  </div>
+
+  <div>
+    <%= form.label :existing_tags, 'Select Existing Tags', class: 'form-label' %>
+    <% Tag.all.each do |tag| %>
+      <label>
+        <%= form.check_box :tag_ids, { multiple: true }, tag.id, class: "form-check-input" %>
+        <%= tag.name %>
+      </label>
+    <% end %>
+  </div>
+
+  <div class="field col">
+    <%= form.fields_for :tags, post.tags.build do |tag_fields| %>
+      <%= tag_fields.label :name, 'New Tag' %>
+      <%= tag_fields.text_field :name, class: 'form-control' %>
+    <% end %>
+  </div>
+
+  <div class="field col">
+    <%= form.file_field :post_image, class: 'form-control' %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit 'Create Post', id: 'create-post-button', class: 'btn btn-primary' %>
+  </div>
+<% end %>

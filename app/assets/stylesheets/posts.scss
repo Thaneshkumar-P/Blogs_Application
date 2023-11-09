@@ -1,0 +1,14 @@
+// Place all the styles related to the posts controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: https://sass-lang.com/
+
+.indicator::backdrop{
+  background-color: #333333;
+  opacity: .5;
+}
+
+.post-table-header-button {
+  background-color: transparent;
+  font-family: Roboto;
+  color: dodgerblue;
+}

@@ -1,0 +1,5 @@
+class AddPostIdToStars < ActiveRecord::Migration[6.1]
+  def change
+    add_reference :stars, :post, null: false, foreign_key: true
+  end
+end

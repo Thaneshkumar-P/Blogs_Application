@@ -1,0 +1,15 @@
+document.getElementById('indicator').close()
+
+<% if @post.errors.any? %>
+
+  document.getElementById('errors').classList.add('alert')
+  document.getElementById('errors').classList.add('alert-danger')
+  document.getElementById('errors').innerHTML = "Error: <%= j @post.errors.full_messages.join(', ') %>"
+
+<% else %>
+
+  document.getElementById('posts').innerHTML = document.getElementById('posts').innerHTML + "<%= j render partial: 'post', locals: { post: @post } %>";
+  document.getElementById('form').innerHTML = "<%= j render partial: 'form', locals: { post: Post.new } %>";
+  alert('post created successfully')
+
+<% end %>

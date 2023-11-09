@@ -1,0 +1,37 @@
+<tr>
+  <% if @topic.present? %>
+    <td><%= post.title %></td>
+  <% else %>
+    <td><%= post.title %> (<%= post.topic.name %>)</td>
+  <% end %>
+  <td><%= post.description %></td>
+  <td><%= post.user.email %></td>
+  <td style="text-align: center">
+    <% if !post.stars.average(:star).nil? %>
+      <%= (post.stars.average(:star) * 10).floor / 10.0 %>
+    <% else %>
+      <%= 0.0 %>
+    <% end %>
+  </td>
+  <td style="text-align: center">
+    <%= post.comments.count || 0 %>
+  </td>
+  <td><%= link_to 'Show', topic_post_path(post.topic_id, post.topic_id) %></td>
+  <td>
+    <% if can? :edit, post %>
+      <%= link_to 'Edit', edit_topic_post_path(post.topic_id, post) %>
+    <% end %>
+  </td>
+  <td>
+    <% if can? :destroy, post %>
+      <%= link_to 'Destroy', topic_post_path(post.topic_id, post), method: :delete, data: { confirm: 'Are you sure?' } %>
+    <% end %>
+  </td>
+  <td id="status-<%= post.id %>">
+    <% if current_user.posts.include?(post) %>
+      <%= 'read' %>
+    <% else %>
+      <%= 'unread' %>
+    <% end %>
+  </td>
+</tr>

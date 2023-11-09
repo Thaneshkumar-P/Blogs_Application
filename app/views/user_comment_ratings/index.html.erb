@@ -1,0 +1,23 @@
+<h1>Comment: <%= @comment.comment %></h1>
+
+<div class="card m-4">
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Rating</th>
+    </tr>
+  </thead>
+
+  <tbody class="table-group-divider">
+    <% @user_comment_ratings.each do |user_comment_rating| %>
+      <tr>
+        <td><%= user_comment_rating.user.email %></td>
+        <td><%= user_comment_rating.rating %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
+
+
